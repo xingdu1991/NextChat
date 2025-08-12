@@ -92,6 +92,10 @@ declare global {
       AI302_URL?: string;
       AI302_API_KEY?: string;
 
+      // ollama only
+      OLLAMA_URL?: string;
+      OLLAMA_API_KEY?: string;
+
       // custom template for preprocessing user input
       DEFAULT_INPUT_TEMPLATE?: string;
 
@@ -168,6 +172,7 @@ export const getServerSideConfig = () => {
   const isChatGLM = !!process.env.CHATGLM_API_KEY;
   const isSiliconFlow = !!process.env.SILICONFLOW_API_KEY;
   const isAI302 = !!process.env.AI302_API_KEY;
+  const isOllama = !!process.env.OLLAMA_URL || true; // Default to true since Ollama runs locally
   // const apiKeyEnvVar = process.env.OPENAI_API_KEY ?? "";
   // const apiKeys = apiKeyEnvVar.split(",").map((v) => v.trim());
   // const randomIndex = Math.floor(Math.random() * apiKeys.length);
@@ -254,6 +259,10 @@ export const getServerSideConfig = () => {
     isAI302,
     ai302Url: process.env.AI302_URL,
     ai302ApiKey: getApiKey(process.env.AI302_API_KEY),
+
+    isOllama,
+    ollamaUrl: process.env.OLLAMA_URL || "http://localhost:11434",
+    ollamaApiKey: getApiKey(process.env.OLLAMA_API_KEY),
 
     gtmId: process.env.GTM_ID,
     gaId: process.env.GA_ID || DEFAULT_GA_ID,

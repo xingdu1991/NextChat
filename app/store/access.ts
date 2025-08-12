@@ -18,6 +18,7 @@ import {
   CHATGLM_BASE_URL,
   SILICONFLOW_BASE_URL,
   AI302_BASE_URL,
+  OLLAMA_BASE_URL,
 } from "../constant";
 import { getHeaders } from "../client/api";
 import { getClientConfig } from "../config/client";
@@ -61,6 +62,8 @@ const DEFAULT_SILICONFLOW_URL = isApp
   : ApiPath.SiliconFlow;
 
 const DEFAULT_AI302_URL = isApp ? AI302_BASE_URL : ApiPath["302.AI"];
+
+const DEFAULT_OLLAMA_URL = isApp ? OLLAMA_BASE_URL : ApiPath.Ollama;
 
 const DEFAULT_ACCESS_STATE = {
   accessCode: "",
@@ -138,6 +141,10 @@ const DEFAULT_ACCESS_STATE = {
   // 302.AI
   ai302Url: DEFAULT_AI302_URL,
   ai302ApiKey: "",
+
+  // ollama
+  ollamaUrl: DEFAULT_OLLAMA_URL,
+  ollamaApiKey: "",
 
   // server config
   needCode: true,
@@ -226,6 +233,11 @@ export const useAccessStore = createPersistStore(
       return ensure(get(), ["siliconflowApiKey"]);
     },
 
+    isValidOllama() {
+      // Ollama doesn't require API key for local usage
+      return true;
+    },
+
     isAuthorized() {
       this.fetch();
 
@@ -245,6 +257,7 @@ export const useAccessStore = createPersistStore(
         this.isValidXAI() ||
         this.isValidChatGLM() ||
         this.isValidSiliconFlow() ||
+        this.isValidOllama() ||
         !this.enabledAccessControl() ||
         (this.enabledAccessControl() && ensure(get(), ["accessCode"]))
       );

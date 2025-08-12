@@ -38,6 +38,8 @@ export const SILICONFLOW_BASE_URL = "https://api.siliconflow.cn";
 
 export const AI302_BASE_URL = "https://api.302.ai";
 
+export const OLLAMA_BASE_URL = "http://localhost:11434";
+
 export const CACHE_URL_PREFIX = "/api/cache";
 export const UPLOAD_URL = `${CACHE_URL_PREFIX}/upload`;
 
@@ -75,6 +77,7 @@ export enum ApiPath {
   DeepSeek = "/api/deepseek",
   SiliconFlow = "/api/siliconflow",
   "302.AI" = "/api/302ai",
+  Ollama = "/api/ollama",
 }
 
 export enum SlotID {
@@ -134,6 +137,7 @@ export enum ServiceProvider {
   DeepSeek = "DeepSeek",
   SiliconFlow = "SiliconFlow",
   "302.AI" = "302.AI",
+  Ollama = "Ollama",
 }
 
 // Google API safety settings, see https://ai.google.dev/gemini-api/docs/safety-settings
@@ -161,6 +165,7 @@ export enum ModelProvider {
   DeepSeek = "DeepSeek",
   SiliconFlow = "SiliconFlow",
   "302.AI" = "302.AI",
+  Ollama = "Ollama",
 }
 
 export const Stability = {
@@ -276,6 +281,12 @@ export const AI302 = {
   ChatPath: "v1/chat/completions",
   EmbeddingsPath: "jina/v1/embeddings",
   ListModelPath: "v1/models?llm=1",
+};
+
+export const Ollama = {
+  ExampleEndpoint: OLLAMA_BASE_URL,
+  ChatPath: "api/chat",
+  ListModelPath: "api/tags",
 };
 
 export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lang
@@ -737,6 +748,41 @@ const ai302Models = [
   "gemini-2.5-pro",
 ];
 
+const ollamaModels = [
+  "llama3.2",
+  "llama3.2:1b",
+  "llama3.2:3b",
+  "llama3.1",
+  "llama3.1:8b",
+  "llama3.1:70b",
+  "llama3",
+  "llama3:8b",
+  "llama3:70b",
+  "llama2",
+  "llama2:7b",
+  "llama2:13b",
+  "llama2:70b",
+  "codellama",
+  "codellama:7b",
+  "codellama:13b",
+  "codellama:34b",
+  "mistral",
+  "mistral:7b",
+  "mixtral",
+  "mixtral:8x7b",
+  "phi3",
+  "phi3:mini",
+  "phi3:medium",
+  "gemma",
+  "gemma:2b",
+  "gemma:7b",
+  "qwen2",
+  "qwen2:0.5b",
+  "qwen2:1.5b",
+  "qwen2:7b",
+  "qwen2:72b",
+];
+
 let seq = 1000; // 内置的模型序号生成器从1000开始
 export const DEFAULT_MODELS = [
   ...openaiModels.map((name) => ({
@@ -902,6 +948,17 @@ export const DEFAULT_MODELS = [
       providerName: "302.AI",
       providerType: "ai302",
       sorted: 15,
+    },
+  })),
+  ...ollamaModels.map((name) => ({
+    name,
+    available: true,
+    sorted: seq++,
+    provider: {
+      id: "ollama",
+      providerName: "Ollama",
+      providerType: "ollama",
+      sorted: 16,
     },
   })),
 ] as const;
